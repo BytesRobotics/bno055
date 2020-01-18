@@ -137,8 +137,8 @@ def publisher():
 
 		dataPub.publish(msg)
 
-		info.stamp = rospy.Time.now()
-		info.frame_id = 'imu_link'
+		info.header.stamp = rospy.Time.now()
+		info.header.frame_id = 'imu_link'
 
 		infoPub.publish(info)
 
