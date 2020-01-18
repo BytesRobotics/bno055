@@ -18,7 +18,7 @@ def publisher():
 	infoPub = rospy.Publisher('/imu/info', bno055_info, queue_size=3)
 
 	rospy.init_node('imu')
-	rate = rospy.Rate(100) #100Hz data read
+	rate = rospy.Rate(50) #50Hz data read
 
 	# Setup BNO055
 	# Create and configure the BNO sensor connection.
