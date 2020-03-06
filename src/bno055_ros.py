@@ -15,6 +15,7 @@ from std_srvs.srv import Trigger, TriggerResponse
 import sys
 
 def save_calibration(req, argv):
+	global sensor
 	response = TriggerResponse()
 	try:
 		calibration = np.array(argv[0].get_calibration())
@@ -41,6 +42,7 @@ def publisher():
 	# Setup BNO055
 	# Create and configure the BNO sensor connection.
 	# Raspberry Pi configuration with I2C and RST connected to GPIO 27:
+	global sensor
 	sensor = BNO055.BNO055()
 
 	try:
@@ -85,7 +87,7 @@ def publisher():
 		except Exception as e:
 			rospy.logerr("Error loading calibration data: " + str(e))
 
-	save_calibration_srv = rospy.Service('/imu/save_calibration', Trigger, save_calibration, (sensor))
+	save_calibration_srv = rospy.Service('/imu/save_calibration', Trigger, save_calibration)
 
 	while not rospy.is_shutdown():
 		# Define messages
