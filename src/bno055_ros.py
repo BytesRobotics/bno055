@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import math
+import numpy as np
 
 import BNO055
 
@@ -10,14 +11,31 @@ from sensor_msgs.msg import Imu
 from geometry_msgs.msg import Quaternion
 from geometry_msgs.msg import Vector3
 from bno055.msg import bno055_info
+from std_srvs.srv import Trigger, TriggerResponse
 import sys
 
+def save_calibration(req, argv):
+	response = TriggerResponse()
+	try:
+		calibration = np.array(argv[0].get_calibration())
+		np.save('calibration', calibration)
+		response.success = True
+		response.message = str(calibration)
+	except Exception as e:
+		response.success = False
+		response.message = str(e)
+		return response
+	return response
+
 def publisher():
+
+	rospy.init_node('imu')
 
 	dataPub = rospy.Publisher('/imu/data', Imu, queue_size=3)
 	infoPub = rospy.Publisher('/imu/info', bno055_info, queue_size=3)
 
-	rospy.init_node('imu')
+	load_calibration = rospy.get_param("~load_calibration", False)
+
 	rate = rospy.Rate(30) #30Hz data read
 
 	# Setup BNO055
@@ -60,6 +78,14 @@ def publisher():
 	rospy.loginfo('Gyroscope ID:       %s', hex(gyro))
 
 	rospy.loginfo('Reading BNO055 data...')
+
+	if load_calibration:
+		try:
+			sensor.set_calibration(np.load('calibration.npy'))
+		except Exception as e:
+			rospy.logerr("Error loading calibration data: " + str(e))
+
+	save_calibration_srv = rospy.Service('/imu/save_calibration', Trigger, save_calibration, (sensor))
 
 	while not rospy.is_shutdown():
 		# Define messages
