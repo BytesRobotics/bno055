@@ -14,11 +14,11 @@ from bno055.msg import bno055_info
 from std_srvs.srv import Trigger, TriggerResponse
 import sys
 
-def save_calibration(req, argv):
+def save_calibration(req):
 	global sensor
 	response = TriggerResponse()
 	try:
-		calibration = np.array(argv[0].get_calibration())
+		calibration = np.array(sensor.get_calibration())
 		np.save('calibration', calibration)
 		response.success = True
 		response.message = str(calibration)
