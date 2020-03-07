@@ -12,14 +12,14 @@ from geometry_msgs.msg import Quaternion
 from geometry_msgs.msg import Vector3
 from bno055.msg import bno055_info
 from std_srvs.srv import Trigger, TriggerResponse
-import sys
+import sys, os
 
 def save_calibration(req):
 	global sensor
 	response = TriggerResponse()
 	try:
 		calibration = np.array(sensor.get_calibration())
-		np.save('calibration', calibration)
+		np.save(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'calibration'), calibration)
 		response.success = True
 		response.message = str(calibration)
 	except Exception as e:
@@ -83,7 +83,7 @@ def publisher():
 
 	if load_calibration:
 		try:
-			sensor.set_calibration(np.load('calibration.npy'))
+			sensor.set_calibration(np.load(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'calibration.npy')).tolist())
 		except Exception as e:
 			rospy.logerr("Error loading calibration data: " + str(e))
 
