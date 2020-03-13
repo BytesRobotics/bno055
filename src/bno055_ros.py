@@ -6,7 +6,7 @@ import numpy as np
 import BNO055
 
 import rospy
-from std_msgs.msg import Header
+from std_msgs.msg import Header, Float64
 from sensor_msgs.msg import Imu
 from geometry_msgs.msg import Quaternion
 from geometry_msgs.msg import Vector3
@@ -34,6 +34,7 @@ def publisher():
 
 	dataPub = rospy.Publisher('/imu/data', Imu, queue_size=3)
 	infoPub = rospy.Publisher('/imu/info', bno055_info, queue_size=3)
+	headingPub = rospy.Publisher('/imu/heading', Float64, queue_size=3)
 
 	load_calibration = rospy.get_param("~load_calibration", False)
 
@@ -50,6 +51,8 @@ def publisher():
 	except Exception as e:
 		rospy.logerr('Failed to initialize BNO055! %s', e)
 		sys.exit(1)
+
+	#sensor.set_axis_remap(BNO055.AXIS_REMAP_Y, BNO055.AXIS_REMAP_X, BNO055.AXIS_REMAP_Z) #swap x,y axis
 
 	# Print system status and self test result.
 	try:
@@ -93,6 +96,7 @@ def publisher():
 		# Define messages
 		msg = Imu()
 		info = bno055_info()
+		heading = Float64()
 
 		orientation = Quaternion()
 		angular_vel = Vector3()
@@ -136,6 +140,7 @@ def publisher():
 				# Linear acceleration data (i.e. acceleration from movement, not gravity--
     			# returned in meters per second squared):
 				linear_accel.x, linear_accel.y, linear_accel.z = sensor.read_linear_acceleration()
+				heading.data = sensor.read_euler()[0]
 				break
 			except Exception as e:
 				rospy.logerr('Failed to read BNO055 data! %s', e)
@@ -169,6 +174,8 @@ def publisher():
 		info.header.frame_id = 'imu_link'
 
 		infoPub.publish(info)
+
+		headingPub.publish(heading)
 
 		rate.sleep()
 
