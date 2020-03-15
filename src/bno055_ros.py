@@ -150,18 +150,18 @@ def publisher():
 		if attempts != 4:
 			msg.orientation = orientation
 			msg.orientation_covariance[0] = 0.01 # covariance in x,y,z (3x3)
-			msg.orientation_covariance[3] = 0.01
-			msg.orientation_covariance[6] = 0.01
+			msg.orientation_covariance[4] = 0.01
+			msg.orientation_covariance[8] = 0.01
 
 			msg.angular_velocity = angular_vel
 			msg.angular_velocity_covariance[0] = 0.01 # covariance in x,y,z (3x3)
-			msg.angular_velocity_covariance[3] = 0.01
-			msg.angular_velocity_covariance[6] = 0.01
+			msg.angular_velocity_covariance[4] = 0.01
+			msg.angular_velocity_covariance[8] = 0.01
 
 			msg.linear_acceleration = linear_accel
 			msg.linear_acceleration_covariance[0] = 0.01 # covariance in x,y,z (3x3)
-			msg.linear_acceleration_covariance[3] = 0.01
-			msg.linear_acceleration_covariance[6] = 0.01
+			msg.linear_acceleration_covariance[4] = 0.01
+			msg.linear_acceleration_covariance[8] = 0.01
 
 
 		#update message headers
