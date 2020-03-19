@@ -1,5 +1,7 @@
 # bno055
 
+[![CodeFactor](https://www.codefactor.io/repository/github/bytesrobotics/bno055/badge)](https://www.codefactor.io/repository/github/bytesrobotics/bno055)
+
 ## Description
 
 ROS node for publishing BNO055 IMU data. Uses the adafruit BNO055 python library.
