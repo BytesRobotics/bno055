@@ -186,16 +186,16 @@ include_directories(
 #   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 # )
 
-catkin_install_python(PROGRAMS src/BNO055
+catkin_install_python(PROGRAMS src/BNO055.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
-catkin_install_python(PROGRAMS src/bno055_ros
+catkin_install_python(PROGRAMS src/bno055_ros.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
-catkin_install_python(PROGRAMS src/I2C
+catkin_install_python(PROGRAMS src/I2C.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
-catkin_install_python(PROGRAMS src/smbus
+catkin_install_python(PROGRAMS src/smbus.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 #############
